@@ -34,10 +34,16 @@ export default function ToDoItem({ todo, remove, toggle }) {
             checked={todo.completed}
             tabIndex={-1}
             disableRipple
-            inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={todo.text} />
+        <ListItemText
+          id={labelId}
+          primary={todo.text}
+          sx={{
+            color: todo.completed ? 'gray' : 'inherit',
+            textDecoration: todo.completed ? 'line-through' : 'none',
+          }}
+        />
       </ListItemButton>
     </ListItem>
   );
