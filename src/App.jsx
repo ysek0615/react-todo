@@ -1,14 +1,13 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import './App.css';
+import CssBaseLine from '@mui/material/CssBaseline';
+import ToDoList from './ToDoList';
 
 function App() {
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>My Todo App</h1>
-      <Button variant="contained" color="primary">
-        MUIボタン
-      </Button>
-    </div>
+    <>
+      <CssBaseLine />
+      <ToDoList />
+    </>
   );
 }
 
