@@ -12,7 +12,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 const getSeedData = () => {
   const data = JSON.parse(localStorage.getItem('todos'));
   if (!data) return [];
-  return data;
+  return data.sort((a, b) => a.order - b.order); // 昇順に並べる
 };
 
 export default function ToDoList() {
@@ -38,7 +38,12 @@ export default function ToDoList() {
   const addTodo = (text) => {
     setTodos((prevTodos) => [
       ...prevTodos,
-      { text, id: crypto.randomUUID(), completed: false },
+      {
+        text,
+        id: crypto.randomUUID(),
+        completed: false,
+        order: prevTodos.length,
+      },
     ]);
   };
 
@@ -50,7 +55,13 @@ export default function ToDoList() {
     const [movedItem] = newTodos.splice(result.source.index, 1); // 元の場所から1個取り出す
     newTodos.splice(result.destination.index, 0, movedItem); // 新しい場所に入れ直す
 
-    setTodos(newTodos); // ステート更新
+    // ここで order を index として付け直す
+    const reordered = newTodos.map((todo, index) => ({
+      ...todo,
+      order: index,
+    }));
+
+    setTodos(reordered); // ステート更新
   };
 
   return (
