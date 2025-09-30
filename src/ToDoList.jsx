@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 // ここがドラッグ関連のimport
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
-// ローカルストレージから初期データを取得
+// モックデータを取得
 const SeedData = [
   {
     id: crypto.randomUUID(),
@@ -32,12 +32,6 @@ const SeedData = [
 
 export default function ToDoList() {
   const [todos, setTodos] = useState(SeedData);
-
-  //   // todosが変更されたら保存
-  //   useEffect(() => {
-  //     localStorage.setItem('todos', JSON.stringify(todos));
-  //   }, [todos]);
-
   const removeTodo = (id) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
