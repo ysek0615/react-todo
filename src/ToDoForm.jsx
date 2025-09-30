@@ -9,12 +9,17 @@ import Create from '@mui/icons-material/Create';
 export default function ToDoForm({ addTodo }) {
   const [text, setText] = useState('');
   const [error, setError] = useState(false); // エラー状態を管理
+  const [category, setCategory] = useState(''); // ← カテゴリ用のstateを追加！
 
   const handleChange = (e) => {
     setText(e.target.value);
     if (error && e.target.value.trim()) {
       setError(false); // 入力されたらエラーを解除
     }
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value); // ← カテゴリ入力を更新
   };
 
   const handleSubmit = (e) => {
@@ -24,8 +29,9 @@ export default function ToDoForm({ addTodo }) {
       return;
     }
 
-    addTodo(text);
+    addTodo(text, category); // ← カテゴリも渡す
     setText('');
+    setCategory(''); // ← 入力をリセット
     setError(false);
   };
 
@@ -51,6 +57,11 @@ export default function ToDoForm({ addTodo }) {
               ),
             },
           }}
+        />
+        <TextField
+          value={category}
+          onChange={handleCategoryChange}
+          placeholder="カテゴリを入力"
         />
       </form>
     </ListItem>

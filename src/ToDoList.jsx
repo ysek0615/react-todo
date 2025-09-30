@@ -9,19 +9,34 @@ import Typography from '@mui/material/Typography';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 // ローカルストレージから初期データを取得
-const getSeedData = () => {
-  const data = JSON.parse(localStorage.getItem('todos'));
-  if (!data) return [];
-  return data.sort((a, b) => a.order - b.order); // 昇順に並べる
-};
+const SeedData = [
+  {
+    id: crypto.randomUUID(),
+    text: '牛乳を買う',
+    completed: false,
+    category: '買い物',
+  },
+  {
+    id: crypto.randomUUID(),
+    text: 'React勉強する',
+    completed: false,
+    category: '勉強',
+  },
+  {
+    id: crypto.randomUUID(),
+    text: '会議の準備',
+    completed: true,
+    category: '仕事',
+  },
+];
 
 export default function ToDoList() {
-  const [todos, setTodos] = useState(getSeedData);
+  const [todos, setTodos] = useState(SeedData);
 
-  // todosが変更されたら保存
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  //   // todosが変更されたら保存
+  //   useEffect(() => {
+  //     localStorage.setItem('todos', JSON.stringify(todos));
+  //   }, [todos]);
 
   const removeTodo = (id) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
@@ -35,7 +50,7 @@ export default function ToDoList() {
     );
   };
 
-  const addTodo = (text) => {
+  const addTodo = (text, category) => {
     setTodos((prevTodos) => [
       ...prevTodos,
       {
@@ -43,6 +58,7 @@ export default function ToDoList() {
         id: crypto.randomUUID(),
         completed: false,
         order: prevTodos.length,
+        category: category?.trim() || '未分類',
       },
     ]);
   };
@@ -105,7 +121,10 @@ export default function ToDoList() {
                         todo={todo}
                         remove={removeTodo}
                         toggle={toggleTodo}
-                      />
+                      />{' '}
+                      <Typography variant="body2" color="text.secondary">
+                        {todo.category || '未分類'}
+                      </Typography>
                     </div>
                   )}
                 </Draggable>
