@@ -74,6 +74,8 @@ export default function ToDoList() {
     setTodos(reordered); // ステート更新
   };
 
+  const categories = [...new Set(SeedData.map((todo) => todo.category))];
+
   return (
     <Box
       sx={{
@@ -88,46 +90,61 @@ export default function ToDoList() {
         ReactToDos
       </Typography>
 
-      {/* 🔁 DragDropContextで囲む */}
       <DragDropContext onDragEnd={handleDragEnd}>
-        {/* 🟦 Droppable：リスト全体がドロップ領域 */}
-        <Droppable droppableId="todo-list">
-          {(provided) => (
-            <List
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            >
-              {todos.map((todo, index) => (
-                // 🟨 Draggable：1つ1つのToDoがドラッグ可能
-                <Draggable
-                  key={todo.id}
-                  draggableId={String(todo.id)}
-                  index={index}
+        {categories.map((category) => (
+          <Box key={category} sx={{ mb: 3, width: '100%', maxWidth: 360 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              {category}
+            </Typography>
+
+            <Droppable droppableId={`category-${category}`}>
+              {(provided) => (
+                <List
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  sx={{ bgcolor: 'background.paper' }}
                 >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <ToDoListItem
-                        todo={todo}
-                        remove={removeTodo}
-                        toggle={toggleTodo}
-                      />{' '}
-                      <Typography variant="body2" color="text.secondary">
-                        {todo.category || '未分類'}
-                      </Typography>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder} {/* 必須：ドラッグ時の隙間調整 */}
-              <ToDoForm addTodo={addTodo} />
-            </List>
-          )}
-        </Droppable>
+                  {todos
+                    .filter((todo) => todo.category === category)
+                    .map((todo, index) => (
+                      <Draggable
+                        key={todo.id}
+                        draggableId={String(todo.id)}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <ToDoListItem
+                              todo={todo}
+                              remove={removeTodo}
+                              toggle={toggleTodo}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </List>
+              )}
+            </Droppable>
+          </Box>
+        ))}
+        {/* フォームは全カテゴリ共通で最後に置く */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mt: 5,
+          }}
+        >
+          <ToDoForm addTodo={addTodo} />
+        </Box>
       </DragDropContext>
     </Box>
   );
