@@ -14,19 +14,19 @@ const SeedData = [
     id: crypto.randomUUID(),
     text: '牛乳を買う',
     completed: false,
-    category: '買い物',
+    category: 'ToDo',
   },
   {
     id: crypto.randomUUID(),
     text: 'React勉強する',
     completed: false,
-    category: '勉強',
+    category: 'Doing',
   },
   {
     id: crypto.randomUUID(),
     text: '会議の準備',
     completed: true,
-    category: '仕事',
+    category: 'Done',
   },
 ];
 
@@ -52,7 +52,7 @@ export default function ToDoList() {
         id: crypto.randomUUID(),
         completed: false,
         order: prevTodos.length,
-        category: category?.trim() || '未分類',
+        category: category?.trim() || 'ToDo',
       },
     ]);
   };
@@ -74,7 +74,7 @@ export default function ToDoList() {
     setTodos(reordered); // ステート更新
   };
 
-  const categories = [...new Set(SeedData.map((todo) => todo.category))];
+  const categories = [...new Set(todos.map((todo) => todo.category))];
 
   return (
     <Box
